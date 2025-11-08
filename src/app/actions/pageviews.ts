@@ -1,6 +1,6 @@
-'use server';
+"use server";
 
-import redis from '@/cache';
+import redis from "@/cache";
 
 const keyFor = (id: string) => `pageviews:article:${id}`;
 

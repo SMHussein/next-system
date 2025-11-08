@@ -1,6 +1,6 @@
-import { dirname } from 'node:path';
-import type { NextConfig } from 'next';
-import env from './env';
+import { dirname } from "node:path";
+import type { NextConfig } from "next";
+import env from "./env";
 
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {

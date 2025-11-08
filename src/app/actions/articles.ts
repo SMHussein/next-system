@@ -1,13 +1,13 @@
-'use server';
+"use server";
 
-import { and, eq } from 'drizzle-orm';
-import { redirect } from 'next/navigation';
-import z from 'zod';
-import db from '@/db';
-import { articles } from '@/db/schema';
-import { stackServerApp } from '@/stack/server';
-import { validateBody } from '../middleware/validation';
-import redis from '@/cache';
+import { and, eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+import z from "zod";
+import redis from "@/cache";
+import db from "@/db";
+import { articles } from "@/db/schema";
+import { stackServerApp } from "@/stack/server";
+import { validateBody } from "../middleware/validation";
 
 const createArticleSchema = z.object({
   title: z.string().min(5),
@@ -34,7 +34,7 @@ export async function createArticle(body: NewArticle) {
     const user = await stackServerApp.getUser();
 
     if (!user) {
-      throw new Error('❌ Unauthorized');
+      throw new Error("❌ Unauthorized");
     }
 
     const articleBody: NewArticle = {
@@ -54,8 +54,8 @@ export async function createArticle(body: NewArticle) {
 
     const [article] = await db.insert(articles).values(result.data).returning();
 
-    redis.del('articles:all');
-    return { success: true, message: 'Article create logged (stub)', article };
+    redis.del("articles:all");
+    return { success: true, message: "Article create logged (stub)", article };
   } catch (e) {
     console.error(e);
     return { error: `Something went wrong while creating the article ! ${e}` };
@@ -67,7 +67,7 @@ export async function updateArticle(id: string, body: UpdateArticleInput) {
     const user = await stackServerApp.getUser();
 
     if (!user) {
-      throw new Error('❌ Unauthorized');
+      throw new Error("❌ Unauthorized");
     }
 
     const result = validateBody(updateArticleSchema, body);
@@ -81,7 +81,7 @@ export async function updateArticle(id: string, body: UpdateArticleInput) {
       .where(and(eq(articles.id, id), eq(articles.authorId, user.id)))
       .returning();
 
-    if (!article) throw new Error('Article not found');
+    if (!article) throw new Error("Article not found");
 
     return {
       success: true,
@@ -99,7 +99,7 @@ export async function deleteArticle(id: string) {
     const user = await stackServerApp.getUser();
 
     if (!user) {
-      throw new Error('❌ Unauthorized');
+      throw new Error("❌ Unauthorized");
     }
 
     const [article] = await db
@@ -107,7 +107,7 @@ export async function deleteArticle(id: string) {
       .where(and(eq(articles.authorId, user.id), eq(articles.id, id)))
       .returning();
 
-    if (!article) throw new Error('Article not found');
+    if (!article) throw new Error("Article not found");
 
     return {
       success: true,
@@ -121,12 +121,12 @@ export async function deleteArticle(id: string) {
 }
 
 export async function deleteArticleForm(formData: FormData): Promise<void> {
-  const id = formData.get('id');
+  const id = formData.get("id");
   if (!id) {
-    throw new Error('Missing article id');
+    throw new Error("Missing article id");
   }
 
   await deleteArticle(String(id));
   // After deleting, redirect the user back to the homepage.
-  redirect('/');
+  redirect("/");
 }

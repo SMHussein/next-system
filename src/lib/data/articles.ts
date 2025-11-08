@@ -1,8 +1,8 @@
-import { eq } from 'drizzle-orm';
-import { z } from 'zod';
-import db from '@/db';
-import { articles } from '@/db/schema';
-import redis from '@/cache';
+import { eq } from "drizzle-orm";
+import { z } from "zod";
+import redis from "@/cache";
+import db from "@/db";
+import { articles } from "@/db/schema";
 
 const ArticleSchema = z.object({
   id: z.string().min(10),
@@ -25,13 +25,13 @@ const withJoins = {
 } as const;
 
 export async function getArticles(): Promise<ArticleZod[]> {
-  const cache = (await redis.get('articles:all')) as ArticleZod[];
+  const cache = (await redis.get("articles:all")) as ArticleZod[];
 
   if (cache) {
-    console.log('🎯 Cache got hit!');
+    console.log("🎯 Cache got hit!");
     return cache;
   }
-  console.log('🏹 Cache got miss!');
+  console.log("🏹 Cache got miss!");
 
   const articles = await db.query.articles.findMany({ with: withJoins });
   const shapedArticles = articles.map((article) => ({
@@ -39,7 +39,7 @@ export async function getArticles(): Promise<ArticleZod[]> {
     title: article.title,
     createdAt: article.createdAt,
     content: article.content,
-    author: article.user?.name ?? 'Unknown',
+    author: article.user?.name ?? "Unknown",
     imageUrl: article.imageUrl,
     tags: article.articleTags?.map((t) => t.tag?.name).filter(Boolean) ?? [],
   }));
@@ -48,11 +48,11 @@ export async function getArticles(): Promise<ArticleZod[]> {
     try {
       z.parse(ArticleSchema, article);
     } catch (e) {
-      console.error('failed to parse schema', e);
+      console.error("failed to parse schema", e);
     }
   });
 
-  redis.set('articles:all', shapedArticles, {
+  redis.set("articles:all", shapedArticles, {
     ex: 60, // one minute
   });
 
@@ -73,7 +73,7 @@ export async function getArticleById(id: string): Promise<ArticleZod | null> {
       title: article.title,
       createdAt: article.createdAt,
       content: article.content,
-      author: article.user?.name ?? 'Unknown',
+      author: article.user?.name ?? "Unknown",
       imageUrl: article.imageUrl,
       authorId: article.authorId,
       tags: article.articleTags?.map((t) => t.tag?.name).filter(Boolean) ?? [],
