@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import MDEditor from "@uiw/react-md-editor";
-import { Upload, X } from "lucide-react";
-import type React from "react";
-import { useState } from "react";
-import { createArticle, updateArticle } from "@/app/actions/articles";
-import { uploadFile } from "@/app/actions/upload";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import MDEditor from '@uiw/react-md-editor';
+import { Upload, X } from 'lucide-react';
+import type React from 'react';
+import { useState } from 'react';
+import { createArticle, updateArticle } from '@/app/actions/articles';
+import { uploadFile } from '@/app/actions/upload';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface WikiEditorProps {
   initialTitle?: string;
@@ -24,8 +24,8 @@ interface FormErrors {
 }
 
 export default function WikiEditor({
-  initialTitle = "",
-  initialContent = "",
+  initialTitle = '',
+  initialContent = '',
   isEditing = false,
   articleId,
 }: WikiEditorProps) {
@@ -40,11 +40,11 @@ export default function WikiEditor({
     const newErrors: FormErrors = {};
 
     if (!title.trim()) {
-      newErrors.title = "Title is required";
+      newErrors.title = 'Title is required';
     }
 
     if (!content.trim()) {
-      newErrors.content = "Content is required";
+      newErrors.content = 'Content is required';
     }
 
     setErrors(newErrors);
@@ -80,7 +80,7 @@ export default function WikiEditor({
       // If there's at least one file, upload the first one via server action
       if (files.length > 0) {
         const fd = new FormData();
-        fd.append("files", files[0]);
+        fd.append('files', files[0]);
         // uploadFile is a server action imported below
         const uploaded = await uploadFile(fd);
         imageUrl = uploaded?.url;
@@ -89,8 +89,9 @@ export default function WikiEditor({
       const payload = {
         title: title.trim(),
         content: content.trim(),
-        authorId: "user-1", // TODO: wire real user id
+        authorId: 'user-1', // TODO: wire real user id
         imageUrl,
+        slug: `${Date.now()}`,
       };
 
       if (isEditing && articleId) {
@@ -99,11 +100,11 @@ export default function WikiEditor({
         console.log(article);
       } else {
         await createArticle(payload);
-        alert("Article created (stub)");
+        alert('Article created (stub)');
       }
     } catch (err) {
-      console.error("Error submitting article:", err);
-      alert("Failed to submit article");
+      console.error('Error submitting article:', err);
+      alert('Failed to submit article');
     } finally {
       setIsSubmitting(false);
     }
@@ -113,15 +114,15 @@ export default function WikiEditor({
   const handleCancel = () => {
     // In a real app, you would navigate back
     const shouldLeave = window.confirm(
-      "Are you sure you want to cancel? Any unsaved changes will be lost.",
+      'Are you sure you want to cancel? Any unsaved changes will be lost.'
     );
     if (shouldLeave) {
-      console.log("User cancelled editing");
+      console.log('User cancelled editing');
       // navigation logic would go here
     }
   };
 
-  const pageTitle = isEditing ? "Edit Article" : "Create New Article";
+  const pageTitle = isEditing ? 'Edit Article' : 'Create New Article';
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -149,7 +150,7 @@ export default function WikiEditor({
                 placeholder="Enter article title..."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className={errors.title ? "border-destructive" : ""}
+                className={errors.title ? 'border-destructive' : ''}
               />
               {errors.title && (
                 <p className="text-sm text-destructive">{errors.title}</p>
@@ -168,22 +169,22 @@ export default function WikiEditor({
               <Label htmlFor="content">Content (Markdown) *</Label>
               <div
                 className={`border rounded-md ${
-                  errors.content ? "border-destructive" : ""
+                  errors.content ? 'border-destructive' : ''
                 }`}
               >
                 <MDEditor
                   value={content}
-                  onChange={(val) => setContent(val || "")}
+                  onChange={(val) => setContent(val || '')}
                   preview="edit"
                   hideToolbar={false}
                   visibleDragbar={false}
                   textareaProps={{
-                    placeholder: "Write your article content in Markdown...",
+                    placeholder: 'Write your article content in Markdown...',
                     style: { fontSize: 14, lineHeight: 1.5 },
                     // make these explicit so SSR and client output match exactly
-                    autoCapitalize: "off",
-                    autoComplete: "off",
-                    autoCorrect: "off",
+                    autoCapitalize: 'off',
+                    autoComplete: 'off',
+                    autoCorrect: 'off',
                     spellCheck: false,
                   }}
                 />
@@ -279,7 +280,7 @@ export default function WikiEditor({
                 disabled={isSubmitting}
                 className="min-w-[100px]"
               >
-                {isSubmitting ? "Saving..." : "Save Article"}
+                {isSubmitting ? 'Saving...' : 'Save Article'}
               </Button>
             </div>
           </CardContent>
