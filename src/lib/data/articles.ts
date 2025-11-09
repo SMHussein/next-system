@@ -39,7 +39,7 @@ export async function getArticles(): Promise<ArticleZod[]> {
     title: article.title,
     createdAt: article.createdAt,
     content: article.content,
-    author: article.user?.name ?? "Unknown",
+    author: article.user.name || "Unknown",
     imageUrl: article.imageUrl,
     tags: article.articleTags?.map((t) => t.tag?.name).filter(Boolean) ?? [],
   }));
@@ -73,7 +73,7 @@ export async function getArticleById(id: string): Promise<ArticleZod | null> {
       title: article.title,
       createdAt: article.createdAt,
       content: article.content,
-      author: article.user?.name ?? "Unknown",
+      author: article.user.name || "Unknown",
       imageUrl: article.imageUrl,
       authorId: article.authorId,
       tags: article.articleTags?.map((t) => t.tag?.name).filter(Boolean) ?? [],

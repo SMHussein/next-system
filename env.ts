@@ -26,6 +26,7 @@ const envSchema = z.object({
   UPSTASH_REDIS_REST_URL: z.string(),
   UPSTASH_REDIS_REST_TOKEN: z.string(),
   CRON_SECRET: z.string().length(16),
+  RESEND_API_KEY: z.string(),
 });
 
 export type Env = z.infer<typeof envSchema>;

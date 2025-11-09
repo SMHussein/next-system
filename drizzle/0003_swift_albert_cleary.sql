@@ -1,1 +1,1 @@
-DROP TABLE "neon_auth"."users_sync" CASCADE;
+-- DROP TABLE "neon_auth"."users_sync" CASCADE;
