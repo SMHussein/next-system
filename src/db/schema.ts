@@ -9,6 +9,8 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+export const users = usersSync;
+
 export const articles = pgTable("articles", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: varchar("title").notNull(),
@@ -45,6 +47,10 @@ export const cronLogs = pgTable("cronLogs", {
   info: text("info").notNull().default("Cron log ran"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
+
+export const userRelations = relations(usersSync, ({ many }) => ({
+  articles: many(articles),
+}));
 
 export const articlesRelations = relations(articles, ({ one, many }) => ({
   user: one(usersSync, {
