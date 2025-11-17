@@ -1,5 +1,5 @@
-import { relations } from "drizzle-orm";
-import { usersSync } from "drizzle-orm/neon";
+import { relations } from 'drizzle-orm';
+import { usersSync } from 'drizzle-orm/neon';
 import {
   boolean,
   pgTable,
@@ -7,45 +7,46 @@ import {
   timestamp,
   uuid,
   varchar,
-} from "drizzle-orm/pg-core";
+} from 'drizzle-orm/pg-core';
 
 export const users = usersSync;
 
-export const articles = pgTable("articles", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  title: varchar("title").notNull(),
-  slug: varchar("slug").notNull().unique(),
-  content: text("content").notNull(),
-  imageUrl: varchar("image_url"),
-  published: boolean("published").default(false).notNull(),
-  authorId: varchar("author_id")
+export const articles = pgTable('articles', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  title: varchar('title').notNull(),
+  slug: varchar('slug').notNull().unique(),
+  content: text('content').notNull(),
+  imageUrl: varchar('image_url'),
+  published: boolean('published').default(false).notNull(),
+  authorId: varchar('author_id')
     .notNull()
-    .references(() => usersSync.id, { onDelete: "cascade" }),
-  createdAt: timestamp("createdAt", { mode: "string" }).notNull().defaultNow(),
-  updatedAt: timestamp("updated_at", { mode: "string" }).notNull().defaultNow(),
+    .references(() => usersSync.id, { onDelete: 'cascade' }),
+  summary: text('summary'),
+  createdAt: timestamp('createdAt', { mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { mode: 'string' }).notNull().defaultNow(),
 });
 
-export const tags = pgTable("tags", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: varchar("name").notNull().unique(),
-  createdAt: timestamp("createdAt", { mode: "string" }).notNull().defaultNow(),
+export const tags = pgTable('tags', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: varchar('name').notNull().unique(),
+  createdAt: timestamp('createdAt', { mode: 'string' }).notNull().defaultNow(),
 });
 
-export const articleTags = pgTable("articleTags", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  articleId: uuid("article_id")
-    .references(() => articles.id, { onDelete: "cascade" })
+export const articleTags = pgTable('articleTags', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  articleId: uuid('article_id')
+    .references(() => articles.id, { onDelete: 'cascade' })
     .notNull(),
-  tagId: uuid("tag_id")
-    .references(() => tags.id, { onDelete: "cascade" })
+  tagId: uuid('tag_id')
+    .references(() => tags.id, { onDelete: 'cascade' })
     .notNull(),
-  createdAt: timestamp("createdAt", { mode: "string" }).notNull().defaultNow(),
+  createdAt: timestamp('createdAt', { mode: 'string' }).notNull().defaultNow(),
 });
 
-export const cronLogs = pgTable("cronLogs", {
-  id: uuid("id").notNull().primaryKey().defaultRandom(),
-  info: text("info").notNull().default("Cron log ran"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+export const cronLogs = pgTable('cronLogs', {
+  id: uuid('id').notNull().primaryKey().defaultRandom(),
+  info: text('info').notNull().default('Cron log ran'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 
 export const userRelations = relations(usersSync, ({ many }) => ({

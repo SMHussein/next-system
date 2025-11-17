@@ -1,12 +1,12 @@
-import { UserButton } from "@stackframe/stack";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { UserButton } from '@stackframe/stack';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-} from "@/components/ui/navigation-menu";
-import { stackServerApp } from "@/stack/server";
+} from '@/components/ui/navigation-menu';
+import { stackServerApp } from '@/stack/server';
 
 export default async function NavBar() {
   const user = await stackServerApp.getUser();
@@ -19,7 +19,7 @@ export default async function NavBar() {
             href="/"
             className="font-bold text-xl tracking-tight text-gray-900"
           >
-            Wikimasters
+            WIKISAIFO
           </Link>
         </div>
         <NavigationMenu>
