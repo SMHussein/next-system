@@ -43,6 +43,13 @@
       "when": 1762715802740,
       "tag": "0005_great_mad_thinker",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1762788672033,
+      "tag": "0006_left_polaris",
+      "breakpoints": true
     }
   ]
 }
